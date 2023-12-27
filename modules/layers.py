@@ -1,5 +1,5 @@
 import numpy as np
-from activation_functions import Activation
+from .activation_functions import Activation
 
 class hamming_layer():
     def __init__(self, n_inputs, n_neurons, activation):
