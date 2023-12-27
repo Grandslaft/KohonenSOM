@@ -47,3 +47,29 @@ class maxnet_layer():
     def add_layer(self, child):
         self.next_layer = child
         return self
+    
+class kohonen_layer():
+    def __init__(self, n_inputs, n_neurons):
+        # random weights with values from uniform PDF
+        self.weights = np.random.uniform(0.5 - 1/np.sqrt(n_neurons), 0.5 + 1/np.sqrt(n_neurons), size = (n_neurons, n_inputs))
+    
+    # function for adding neurons
+    def add_neuron(self, x):
+        self.weights = np.vstack((self.weights, x))
+    
+    # updating weights
+    def update_weights(self, x, min_ind, lr, radius):
+        # euclidean distance
+        n_distances = np.linalg.norm(self.weights[min_ind] - self.weights, axis = 1)
+        # if radius is too small updating only one weight
+        if radius < 1e-3:
+            self.weights[min_ind] += lr * (x - self.weights[min_ind])
+        # otherwise updating weights for all the neighbors with scaling
+        neighbours = n_distances <= radius
+        h = np.exp(-n_distances[neighbours]/(2 * np.square(radius)))
+        self.weights[neighbours] += lr * np.multiply(h.reshape(-1,1), (x - self.weights[neighbours]))
+    
+    # adding next layer
+    def add_layer(self, child):
+        self.next_layer = child
+        return self
