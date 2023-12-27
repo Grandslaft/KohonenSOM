@@ -1,2 +1,2 @@
 # HammingNN
-Just a Hamming NN with some maxnet-ish layer
+Kohonen SOM with Hamming NN for classification and ability to add new neurons
